@@ -396,8 +396,13 @@ public class MobileNetworkSettings extends PreferenceActivity
                         modemNetworkMode = buttonNetworkMode;
                         break;
                     default:
-                        loge("Invalid Network Mode (" + buttonNetworkMode + ") chosen. Ignore.");
-                        return true;
+						if (buttonNetworkMode == 7 && SystemProperties.getInt("ro.telephony.toroRIL", 0) == 1) {
+							loge("Invalid Network Mode (" + buttonNetworkMode + ") chosen. We aren't going to ignore it because toro has a bug in its RIL that we need to bypass.");
+							modemNetworkMode = buttonNetworkMode;							
+						} else {
+							loge("Invalid Network Mode (" + buttonNetworkMode + ") chosen. Ignore.");
+							return true;
+						}
                 }
 
                 UpdatePreferredNetworkModeSummary(buttonNetworkMode);
@@ -432,8 +437,13 @@ public class MobileNetworkSettings extends PreferenceActivity
                         modemNetworkMode = buttonNetworkMode;
                         break;
                     default:
-                        loge("Invalid Network Mode (" + buttonNetworkMode + ") chosen. Ignore.");
-                        return true;
+						if (buttonNetworkMode == 7 && SystemProperties.getInt("ro.telephony.toroRIL", 0) == 1) {
+							loge("Invalid Network Mode (" + buttonNetworkMode + ") chosen. We aren't going to ignore it because toro has a bug in its RIL that we need to bypass.");
+							modemNetworkMode = buttonNetworkMode;							
+						} else {
+							loge("Invalid Network Mode (" + buttonNetworkMode + ") chosen. Ignore.");
+							return true;
+						}
                 }
 
                 UpdateEnabledNetworksSummary(buttonNetworkMode);
@@ -659,8 +669,14 @@ public class MobileNetworkSettings extends PreferenceActivity
                 mButtonEnabledNetworks.setSummary("LTE");
                 break;
             case Phone.NT_MODE_CDMA:
+				mButtonEnabledNetworks.setSummary("3G");
+				break;
             case Phone.NT_MODE_GLOBAL:
-                mButtonEnabledNetworks.setSummary("3G");
+                if (SystemProperties.getInt("ro.telephony.toroRIL", 0) == 1) {
+					mButtonEnabledNetworks.setSummary("LTE");
+				} else {
+					mButtonEnabledNetworks.setSummary("3G");
+				}
                 break;
             case Phone.NT_MODE_CDMA_NO_EVDO:
                 mButtonEnabledNetworks.setSummary("1X");
