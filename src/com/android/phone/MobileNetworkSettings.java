@@ -409,8 +409,13 @@ public class MobileNetworkSettings extends PreferenceActivity
                         modemNetworkMode = buttonNetworkMode;
                         break;
                     default:
-                        loge("Invalid Network Mode (" + buttonNetworkMode + ") chosen. Ignore.");
-                        return true;
+						if (buttonNetworkMode == 7 && SystemProperties.getInt("ro.telephony.toroRIL", 0) == 1) {
+							loge("Invalid Network Mode (" + buttonNetworkMode + ") chosen. We aren't going to ignore it because toro has a bug in its RIL that we need to bypass.");
+							modemNetworkMode = buttonNetworkMode;							
+						} else {
+							loge("Invalid Network Mode (" + buttonNetworkMode + ") chosen. Ignore.");
+							return true;
+						}
                 }
 
                 UpdatePreferredNetworkModeSummary(buttonNetworkMode);
@@ -445,8 +450,13 @@ public class MobileNetworkSettings extends PreferenceActivity
                         modemNetworkMode = buttonNetworkMode;
                         break;
                     default:
-                        loge("Invalid Network Mode (" + buttonNetworkMode + ") chosen. Ignore.");
-                        return true;
+						if (buttonNetworkMode == 7 && SystemProperties.getInt("ro.telephony.toroRIL", 0) == 1) {
+							loge("Invalid Network Mode (" + buttonNetworkMode + ") chosen. We aren't going to ignore it because toro has a bug in its RIL that we need to bypass.");
+							modemNetworkMode = buttonNetworkMode;							
+						} else {
+							loge("Invalid Network Mode (" + buttonNetworkMode + ") chosen. Ignore.");
+							return true;
+						}
                 }
 
                 UpdateEnabledNetworksValueAndSummary(buttonNetworkMode);
